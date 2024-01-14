@@ -1,0 +1,63 @@
+[
+    {
+      "id": 1,
+      "pseudo": "john_doe",
+      "email": "john.doe@example.com",
+      "avatar": "https://example.com/avatar/john_doe.jpg"
+    },
+    {
+      "id": 2,
+      "pseudo": "alice_smith",
+      "email": "alice.smith@example.com",
+      "avatar": "https://example.com/avatar/alice_smith.jpg"
+    },
+    {
+      "id": 3,
+      "pseudo": "mike_jones",
+      "email": "mike.jones@example.com",
+      "avatar": "https://example.com/avatar/mike_jones.jpg"
+    },
+    {
+      "id": 4,
+      "pseudo": "sara_brown",
+      "email": "sara.brown@example.com",
+      "avatar": "https://example.com/avatar/sara_brown.jpg"
+    },
+    {
+      "id": 5,
+      "pseudo": "alex_wilson",
+      "email": "alex.wilson@example.com",
+      "avatar": "https://example.com/avatar/alex_wilson.jpg"
+    },
+    {
+      "id": 6,
+      "pseudo": "emily_martin",
+      "email": "emily.martin@example.com",
+      "avatar": "https://example.com/avatar/emily_martin.jpg"
+    },
+    {
+      "id": 7,
+      "pseudo": "peter_clark",
+      "email": "peter.clark@example.com",
+      "avatar": "https://example.com/avatar/peter_clark.jpg"
+    },
+    {
+      "id": 8,
+      "pseudo": "laura_jackson",
+      "email": "laura.jackson@example.com",
+      "avatar": "https://example.com/avatar/laura_jackson.jpg"
+    },
+    {
+      "id": 9,
+      "pseudo": "kevin_adams",
+      "email": "kevin.adams@example.com",
+      "avatar": "https://example.com/avatar/kevin_adams.jpg"
+    },
+    {
+      "id": 10,
+      "pseudo": "natalie_white",
+      "email": "natalie.white@example.com",
+      "avatar": "https://example.com/avatar/natalie_white.jpg"
+    }
+]
+  

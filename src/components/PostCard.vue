@@ -27,8 +27,10 @@
 </template>
 <script setup lang="ts">
 import dayJS from 'dayjs';
-import { Post } from 'src/types';
+import { Post } from 'src/interfaces/index';
+import { useAppStore } from 'src/stores/application';
 import { PropType } from 'vue';
+import { useUrlHelper } from 'src/composables/helpers/useUrlHelper';
 
 defineProps({
   post: {
@@ -37,9 +39,13 @@ defineProps({
   },
 });
 
+const appStore = useAppStore();
+
 const formatDate = (date: string) => {
   return dayJS(date).format('DD/MM/YYYY HH:mm');
 };
+
+const { prefixUrl } = useUrlHelper();
 </script>
 <style scoped lang="sass">
 .my-card

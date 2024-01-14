@@ -1,20 +1,29 @@
 import { defineStore } from 'pinia';
-import { api } from 'src/boot/axios';
-import { Post } from 'src/types';
+import { usePostCrud } from 'src/composables/http/usePostCrud';
+import { Post } from 'src/interfaces';
 import { ref } from 'vue';
 
 export const usePostStore = defineStore('posts', () => {
   const isLoading = ref(false);
   const posts = ref<Post[]>([]);
 
-  const loadPosts = async () => {
+  console.log('-- 101.0 -> Use post store now...');
+
+  const loadPosts = async (limit = 10) => {
     isLoading.value = true;
     posts.value = [];
     try {
-      const response = await api.get<Post[]>('/posts/find?sort=updatedAt DESC');
-      if (response.status === 200) {
-        posts.value = response.data;
-      }
+      console.log(
+        '-- 101.1 -> Load posts: Limit set for post store fetch: ',
+        limit
+      );
+      const { postsFromRemote, findPost } = usePostCrud();
+      await findPost(limit);
+      // await findPostFromCacheFirst();
+      posts.value = postsFromRemote.value;
+      // saveLastPostOffline();
+      // console.log('-- 601 -> End of load posts.');
+      return posts.value?.length;
     } catch (error) {
       console.error('🚀 ~ file: posts.ts:16 ~ loadPosts ~ error:', error);
       posts.value = [];

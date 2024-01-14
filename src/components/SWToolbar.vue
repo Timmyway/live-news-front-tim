@@ -1,8 +1,14 @@
 <template>
-  <div class="text-semi-bold username">
-    <div>Hello, {{ formattedName }}</div>
+  <!-- 
+    I've included a <div> tag here to address the warning 
+    indicating the necessity of a single root parent element.
+  -->
+  <div>
+    <div class="text-semi-bold username">
+      <div>Hello, {{ formattedName }}</div>
+    </div>
+    <slot name="online"></slot>
   </div>
-  <slot name="online"></slot>
 </template>
 
 <script setup lang="ts">

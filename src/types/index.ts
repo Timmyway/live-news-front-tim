@@ -1,15 +1,9 @@
-export interface User {
-  id: number;
-  pseudo: string;
-  email: string;
-  avatar: string;
-}
+export type DatabaseInfos = {
+  host: string;
+  localName: string;
+  remoteName: string;
+};
 
-export interface Post {
-  id: number;
-  title: string;
-  body: string;
-  author: User;
-  updatedAt: string;
-  createdAt: string;
-}
+export type DocRecord = Record<string, number | string>;
+
+export type Env = 'local' | 'remote';

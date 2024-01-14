@@ -28,8 +28,15 @@ import { SessionStorage } from 'quasar';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import OnlineCheck from 'src/components/OnlineCheck.vue';
+import { useAppStore } from 'src/stores/application';
+import { cpuUsage } from 'process';
+
 const $route = useRoute();
 const $router = useRouter();
+
+const appStore = useAppStore();
+const { resetPageItemsCount } = appStore;
+
 const title = computed(() => {
   return $route.meta.title || 'Untitled page';
 });
@@ -40,5 +47,7 @@ const username = computed(() => {
 const logout = () => {
   SessionStorage.remove('loggedUser');
   $router.push({ name: 'login' });
+  // This is necessary for posts display mechanism.
+  resetPageItemsCount();
 };
 </script>
