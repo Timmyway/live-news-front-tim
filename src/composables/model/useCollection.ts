@@ -1,27 +1,77 @@
 import { PostCollection } from 'src/db/PostModel';
-import { ref, computed, onMounted } from 'vue';
+import { CacheStatus } from 'src/interfaces';
+import { useDatabaseStore } from 'src/stores/databases';
+import { ref } from 'vue';
 
-export function useCollection() {
-  const postCollection = ref<PostCollection | null>(null);
+export function useCollection(name: string) {
+  const collection = ref(null);
 
-  const init = () => {
-    console.log('-- 000 -> Initialize post collection with PouchdbORM');
-    postCollection.value = new PostCollection('local_livenews');
+  const databaseStore = useDatabaseStore();
+
+  const { getLocalDb } = databaseStore;
+
+  const init = async () => {
+    console.log('-- 750 -> Init collection: ', name);
+    collection.value = await getLocalDb().collection(name).get();
   };
 
-  const postCollectionInfos = async () => {
-    if (postCollection.value !== null) {
-      const infos = await postCollection.value.db.info();
-      console.log('-- 970 -> post collection infos: ', infos);
-      return infos;
-    } else {
-      // Handle the case where postCollection.value is null
-      console.error('Post collection is not initialized.');
-      return null; // Or another appropriate value or behavior
+  const saveDoc = async (doc: object) => {
+    console.log('-- 750 -> Save doc to local database: ', doc);
+    try {
+      await getLocalDb().collection(name).add(doc);
+    } catch (err) {
+      console.log('-- 750.9 -> Cannot add to locabase database: ', err);
+    }
+  };
+
+  const setCollection = (docs: object[]) => {
+    console.log('-- 756 -> Set collection: ', docs.length);
+    getLocalDb().collection(name).set(docs);
+  };
+
+  const getCollection = async (): Promise<object[] | []> => {
+    try {
+      const results = await getLocalDb()
+        .collection(name)
+        .orderBy('updatedAt')
+        .get();
+      return results;
+    } catch (err) {
+      console.log('-- 751 -> Get collection error: ', err);
+      return [];
+    }
+  };
+
+  const hasCachedItems = async (): Promise<CacheStatus> => {
+    try {
+      const items = await getCollection();
+      if (items.length > 0) {
+        return { status: true, count: items.length };
+      }
+      return { status: false, count: 0 };
+    } catch (err) {
+      return { status: false, count: 0 };
+    }
+  };
+
+  const clearCollection = async () => {
+    try {
+      // await getLocalDb().collection(name).delete();
+      await getLocalDb().collection(name).delete();
+      console.log('-- 752 -> Collection cleared successfully');
+    } catch (err) {
+      console.log('-- 752.1 -> Clear collection error: ', err);
     }
   };
 
   init();
 
-  return { postCollection, postCollectionInfos };
+  return {
+    collection,
+    saveDoc,
+    getCollection,
+    setCollection,
+    clearCollection,
+    hasCachedItems,
+  };
 }

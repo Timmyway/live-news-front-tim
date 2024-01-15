@@ -5,30 +5,22 @@ import { computed, ref } from 'vue';
 import { usePostStore } from './posts';
 import { usePrefetchAvatars } from 'src/composables/usePrefetchAvatars';
 import { useAppStore } from './application';
+import { useProgression } from 'src/composables/helpers/useProgression';
 export const useSyncState = defineStore('sync', () => {
   const isOnline = computed(() => {
     return useOnline();
   });
-  const itemsProgression = ref(0);
 
   const postStore = usePostStore();
   const appStore = useAppStore();
 
-  const getItemsLoadingProgression = computed(() => {
-    return itemsProgression.value;
-  });
-  const getItemsLoadingProgressionValue = computed(() => {
-    return itemsProgression.value / 100;
-  });
-
-  const setLoadingProgression = (value: number) => {
-    itemsProgression.value = value;
-  };
-
-  const cancelLoadingProgression = () => {
-    // The sync page disappear when below value reach 100.
-    itemsProgression.value = 100;
-  };
+  const {
+    itemsProgression,
+    getItemsLoadingProgression,
+    getItemsLoadingProgressionValue,
+    setLoadingProgression,
+    cancelLoadingProgression,
+  } = useProgression();
 
   const process = async () => {
     // Ensure that the progression start from 0.
@@ -52,19 +44,6 @@ export const useSyncState = defineStore('sync', () => {
     } finally {
       itemsProgression.value = 100;
     }
-    // const fakeArray = [10, 25, 50, 75, 100];
-    // let index = 0;
-    // const intervalId = setInterval(() => {
-    //   console.log(
-    //     '-- 800 -> Inside clear interval - progression: ',
-    //     itemsProgression.value
-    //   );
-    //   if (index < fakeArray.length) {
-    //     itemsProgression.value = fakeArray[index++];
-    //   } else {
-    //     clearInterval(intervalId);
-    //   }
-    // }, 1000);
   };
 
   return {

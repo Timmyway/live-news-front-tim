@@ -1,4 +1,6 @@
+import { storeToRefs } from 'pinia';
 import { PaginationConfig } from 'src/interfaces';
+import { useCacheStore } from 'src/stores/cache';
 import { ref, computed, watch } from 'vue';
 
 export function usePaginationConfig({
@@ -31,33 +33,41 @@ export function usePaginationConfig({
     !isNaN(storedNewItemsCount) ? storedNewItemsCount : newItems
   );
 
-  // Watch for changes and update localStorage
-  watch([pageItemsCount], () => {
-    localStorage.setItem('pageItemsCount', pageItemsCount.value.toString());
-  });
-
   const paginate = () => {
     console.log(`-- 998.1 -> Allow more items: ${allowMoreItems.value}`);
     console.log(
       `-- 998.2 -> BEFORE ${pageItemsCount.value} items out of ${maxItemCount.value} max allowed`
     );
+
     if (allowMoreItems.value) {
       pageItemsCount.value += newItemsCount.value;
-    } else {
-      console.log('-- 999 -> Reached max items allowed.');
     }
+
     console.log(
       `-- 998.3 -> AFTER ${pageItemsCount.value} items out of ${maxItemCount.value} max allowed`
     );
   };
 
+  // Remove page item count from localstorage.
+  const cacheStore = useCacheStore();
+  const { cacheValid } = storeToRefs(cacheStore);
+
   const resetPageItemsCount = (): void => {
     console.log('-- 990 -> Reset page item count from local storage.');
+    if (!cacheValid) {
+      return;
+    }
     localStorage.removeItem('pageItemsCount');
   };
 
+  /* --- Computed and watch --- */
   const allowMoreItems = computed((): boolean => {
     return pageItemsCount.value <= maxItemCount.value;
+  });
+
+  watch([pageItemsCount], () => {
+    // Update the number of posts displayed per page.
+    localStorage.setItem('pageItemsCount', pageItemsCount.value.toString());
   });
 
   console.log(

@@ -28,7 +28,6 @@
 <script setup lang="ts">
 import dayJS from 'dayjs';
 import { Post } from 'src/interfaces/index';
-import { useAppStore } from 'src/stores/application';
 import { PropType } from 'vue';
 import { useUrlHelper } from 'src/composables/helpers/useUrlHelper';
 
@@ -38,8 +37,6 @@ defineProps({
     required: true,
   },
 });
-
-const appStore = useAppStore();
 
 const formatDate = (date: string) => {
   return dayJS(date).format('DD/MM/YYYY HH:mm');

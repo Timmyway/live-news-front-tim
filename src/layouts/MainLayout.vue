@@ -29,7 +29,6 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import OnlineCheck from 'src/components/OnlineCheck.vue';
 import { useAppStore } from 'src/stores/application';
-import { cpuUsage } from 'process';
 
 const $route = useRoute();
 const $router = useRouter();

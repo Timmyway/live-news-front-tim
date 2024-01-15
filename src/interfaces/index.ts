@@ -31,4 +31,10 @@ export interface PaginationConfig {
   items: number;
   maxItems: number;
   newItems: number;
+  offlinePosts: number;
+}
+
+export interface CacheStatus {
+  status: boolean;
+  count: number;
 }
