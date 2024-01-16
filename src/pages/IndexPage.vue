@@ -11,18 +11,24 @@
           v-show="apiUnreachable"
           >Offline posts may be outdated</q-chip
         >
-        <q-infinite-scroll @load="onLoad" :offset="50" debounce="200">
+        <q-infinite-scroll @load="onLoad" :offset="50" debounce="250">
           <template v-slot:loading>
-            <div class="row justify-center q-my-md">
+            <div v-show="!outOfRange" class="row justify-center q-my-md">
               <q-spinner color="primary" name="dots" size="40px" />
             </div>
           </template>
           <q-list class="column">
-            <q-item v-for="post in posts" :key="post.id">
+            <q-item v-for="(post, index) in posts" :key="index">
+              <span>{{ index + 1 }}</span>
               <post-card :post="post"></post-card>
             </q-item>
           </q-list>
         </q-infinite-scroll>
+        <div v-if="outOfRange" class="row justify-center q-my-md">
+          <q-banner class="bg-primary text-white">
+            Explored it all! 🌐 Refresh for fresh posts! 🚀"
+          </q-banner>
+        </div>
       </div>
     </template>
   </q-page>
@@ -32,22 +38,15 @@
 import { storeToRefs } from 'pinia';
 import { usePostStore } from 'src/stores/posts';
 import PostCard from 'src/components/PostCard.vue';
-import { useAppStore } from 'src/stores/application';
 import { onBeforeUnmount } from 'vue';
 import { useCacheStore } from 'src/stores/cache';
 
 const postStore = usePostStore();
-const { isLoading, posts, apiUnreachable } = storeToRefs(postStore);
+const { isLoading, posts, apiUnreachable, outOfRange } = storeToRefs(postStore);
 const { loadPosts } = postStore;
-
-const appStore = useAppStore();
-const { allowMoreItems, pageItemsCount } = storeToRefs(appStore);
-const { paginate, resetPageItemsCount } = appStore;
 
 const cacheStore = useCacheStore();
 const { scheduleInvalidation, stopScheduleInvalidation } = cacheStore;
-
-console.log('-- 000.0 Entering index page');
 
 const onLoad = async (index, done: () => void) => {
   /*
@@ -55,28 +54,22 @@ const onLoad = async (index, done: () => void) => {
     when the number of posts is insufficient to extend the container's height
     beyond the threshold, causing the infinite scroll event to fire repeatedly.
   */
-  if (await allowMoreItems.value) {
-    await loadPosts(pageItemsCount.value);
-    paginate();
-  }
-  done();
+  setTimeout(async () => {
+    // The timer is set to 1s to allow visibility of the loading spinner.
+    await loadPosts();
+    done();
+  }, 1000);
 };
 
-const sync = async () => {
-  await appStore.sync();
-};
-
-scheduleInvalidation(30);
-
-// Cleaning just before users refresh the page.
-window.addEventListener('beforeunload', () => {
-  resetPageItemsCount();
-});
+// Change this value to tweek cache timeout validation.
+// We can only fetch new posts after cache has been invalidated.
+// So a bigger value means we load from cache longer time. Bellow set to 5 min
+scheduleInvalidation(60 * 5);
 
 // Cleanup the event listener when the component is unmounted.
 onBeforeUnmount(() => {
-  window.removeEventListener('beforeunload', resetPageItemsCount);
   // Cleanup the invalidation interval task.
   stopScheduleInvalidation();
+  posts.value = [];
 });
 </script>

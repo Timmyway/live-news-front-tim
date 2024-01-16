@@ -2,7 +2,7 @@ import { Post, PrefetchedAvatars } from 'src/interfaces/index';
 import { ref } from 'vue';
 import { useUrlHelper } from './helpers/useUrlHelper';
 
-export function usePrefetchAvatars(data: Post[], baseUrl = '') {
+export function usePrefetchAvatars(data: Post[] | object[], baseUrl = '') {
   const prefetchedAvatars = ref<PrefetchedAvatars>({});
 
   const loadAvatars = () => {
@@ -41,7 +41,7 @@ export function usePrefetchAvatars(data: Post[], baseUrl = '') {
         const { prefixUrl } = useUrlHelper();
         avatarUrl = prefixUrl(avatarUrl, baseUrl);
 
-        /* I aim to avoid waiting for avatar images to load, 
+        /* I aim to avoid waiting for avatar images to load,
           especially in scenarios where there are numerous images
           or they are excessively large.
         */

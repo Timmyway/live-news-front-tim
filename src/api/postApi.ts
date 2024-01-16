@@ -4,9 +4,12 @@ import { Post } from 'src/interfaces';
 export default {
   async fetchPost(limit = 10) {
     try {
-      return await api.get<Post[]>(
-        `/posts/find?sort=updatedAt DESC&limit=${limit}`
-      );
+      const apiUrl = limit
+        ? `/posts?sort=updatedAt DESC&limit=${limit}`
+        : '/posts?sort=updatedAt DESC';
+
+      // If limit is set, use limit else find all posts
+      return await api.get<Post[]>(apiUrl);
     } catch (error) {
       throw error;
     }

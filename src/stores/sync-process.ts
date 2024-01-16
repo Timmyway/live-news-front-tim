@@ -1,7 +1,7 @@
 import 'pinia';
 import { defineStore } from 'pinia';
 import { useOnline } from '@vueuse/core';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { usePostStore } from './posts';
 import { usePrefetchAvatars } from 'src/composables/usePrefetchAvatars';
 import { useAppStore } from './application';
@@ -27,18 +27,17 @@ export const useSyncState = defineStore('sync', () => {
     itemsProgression.value = 0;
     try {
       // Take advantage of the loading process to request list of posts
-      await postStore.loadPosts(appStore.pageItemsCount);
-      // After loading more mosts, we have to adjust how they are displayed
-      appStore.paginate();
+      await postStore.loadPosts();
+
       // Start avatar fetching process
       const { loadAvatarsAsync } = usePrefetchAvatars(
         postStore.posts,
         appStore.apiUrl
       );
       await loadAvatarsAsync();
+
       // The init page disappear when progression is fully complete.
       itemsProgression.value = 100;
-      console.log('-- 001.9 -> Finished loading avatars and posts');
     } catch (err) {
       itemsProgression.value = 100;
     } finally {

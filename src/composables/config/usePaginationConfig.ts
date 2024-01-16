@@ -15,7 +15,7 @@ export function usePaginationConfig({
   );
   const storedMaxItemCount = parseInt(
     localStorage.getItem('maxItemCount') || '',
-    10
+    30
   );
   const storedNewItemsCount = parseInt(
     localStorage.getItem('newItemsCount') || '',
@@ -62,7 +62,7 @@ export function usePaginationConfig({
 
   /* --- Computed and watch --- */
   const allowMoreItems = computed((): boolean => {
-    return pageItemsCount.value <= maxItemCount.value;
+    return pageItemsCount.value < maxItemCount.value;
   });
 
   watch([pageItemsCount], () => {

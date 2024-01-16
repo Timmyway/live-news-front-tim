@@ -28,13 +28,16 @@ import { SessionStorage } from 'quasar';
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import OnlineCheck from 'src/components/OnlineCheck.vue';
-import { useAppStore } from 'src/stores/application';
+import { useCacheStore } from 'src/stores/cache';
+import { usePostStore } from 'src/stores/posts';
 
 const $route = useRoute();
 const $router = useRouter();
 
-const appStore = useAppStore();
-const { resetPageItemsCount } = appStore;
+const cacheStore = useCacheStore();
+const { invalidateCache } = cacheStore;
+const postStore = usePostStore();
+const { resetPosts } = postStore;
 
 const title = computed(() => {
   return $route.meta.title || 'Untitled page';
@@ -43,10 +46,12 @@ const username = computed(() => {
   return SessionStorage.getItem('loggedUser');
 });
 
-const logout = () => {
+const logout = async () => {
   SessionStorage.remove('loggedUser');
   $router.push({ name: 'login' });
-  // This is necessary for posts display mechanism.
-  resetPageItemsCount();
+
+  // Clear offline posts whe user logout, clean some stuff
+  await invalidateCache();
+  resetPosts();
 };
 </script>

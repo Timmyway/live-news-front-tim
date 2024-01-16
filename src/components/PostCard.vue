@@ -29,7 +29,6 @@
 import dayJS from 'dayjs';
 import { Post } from 'src/interfaces/index';
 import { PropType } from 'vue';
-import { useUrlHelper } from 'src/composables/helpers/useUrlHelper';
 
 defineProps({
   post: {
@@ -41,8 +40,6 @@ defineProps({
 const formatDate = (date: string) => {
   return dayJS(date).format('DD/MM/YYYY HH:mm');
 };
-
-const { prefixUrl } = useUrlHelper();
 </script>
 <style scoped lang="sass">
 .my-card
