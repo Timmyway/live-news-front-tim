@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { computed, onMounted, watch } from 'vue';
 import SwToolbar from 'src/components/SWToolbar.vue';
-import { useSyncState } from 'src/stores/sync';
+import { useSyncState } from 'src/stores/sync-process';
 import { SessionStorage } from 'quasar';
 import { useRouter } from 'vue-router';
 import OnlineCheck from 'src/components/OnlineCheck.vue';
@@ -66,7 +66,7 @@ const itemsLoadingProgressionValue = computed(
 );
 
 const cancelSync = () => {
-  // TODO: implement
+  syncState.cancelLoadingProgression();
 };
 
 watch(itemsLoadingProgression, async () => {
@@ -76,6 +76,6 @@ watch(itemsLoadingProgression, async () => {
   }
 });
 onMounted(() => {
-  syncState.simulateProgression();
+  syncState.process();
 });
 </script>

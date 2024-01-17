@@ -62,3 +62,7 @@ The main aspects we are looking for is:
 - short template with reusable components
 - separation of concerns among the different parts of the codebase
 - your ability to explain and argue why you chose to refactor or change parts of the codebase
+
+## Note from Tim
+
+I have a bug that prevents me from using yarn with this project. Even though I kept the Node.js version at 19.7 and tried downgrading the version of @quasar/app-vite to 1.3.0, I ended up using npm.

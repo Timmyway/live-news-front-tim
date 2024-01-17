@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useSyncState } from 'src/stores/sync';
+import { useSyncState } from 'src/stores/sync-process';
 const { isOnline } = useSyncState();
 </script>
 

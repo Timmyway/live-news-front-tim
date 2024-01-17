@@ -17,6 +17,8 @@
     "@vueuse/core": "^10.7.0",
     "axios": "^1.2.1",
     "dayjs": "^1.11.10",
+    "events": "^3.3.0",
+    "localbase": "^0.7.5",
     "lodash": "^4.17.21",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",

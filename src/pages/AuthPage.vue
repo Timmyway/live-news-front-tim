@@ -9,7 +9,10 @@
             </div>
             <div class="column col content-center justify-center center">
               <div class="q-pl-md q-pr-md" style="max-width: 500px">
-                <h4 class="title">Login</h4>
+                <h4 class="title">
+                  Login {{ postStore.posts.length }} |
+                  {{ postStore.postOffset }}
+                </h4>
                 <div class="subtitle">
                   Type a username and a complex password to log in
                 </div>
@@ -95,8 +98,11 @@
 <script setup lang="ts">
 import { ionEyeSharp, ionEyeOffSharp } from '@quasar/extras/ionicons-v5';
 import { SessionStorage } from 'quasar';
+import { usePostStore } from 'src/stores/posts';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+
+const postStore = usePostStore();
 
 enum PASSWORD_STRENGTH {
   TOO_SHORT = 'Too Short',

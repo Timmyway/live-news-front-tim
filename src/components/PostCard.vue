@@ -27,7 +27,7 @@
 </template>
 <script setup lang="ts">
 import dayJS from 'dayjs';
-import { Post } from 'src/types';
+import { Post } from 'src/interfaces/index';
 import { PropType } from 'vue';
 
 defineProps({
